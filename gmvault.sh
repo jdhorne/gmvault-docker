@@ -2,6 +2,11 @@
 
 OAUTH_TOKEN="/data/${GMVAULT_EMAIL_ADDR}.oauth2"
 
+if [ "$GMVAULT_TZ" = "" ] ; then GMVAULT_TZ="America/New_York" ; fi
+echo "timezone: $GMVAULT_TZ"
+setup-timezone -z $GMVAULT_TZ
+date
+
 
 if [ ! "$(id -u abc)" -eq "$PUID" ]; then usermod -o -u "$PUID" abc ; fi
 if [ ! "$(id -g abc)" -eq "$PGID" ]; then groupmod -o -g "$PGID" abc ; fi

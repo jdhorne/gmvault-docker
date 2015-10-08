@@ -7,6 +7,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
 RUN apk add --update \
 	bash \
         ca-certificates \
+        tzdata \
         python \
         py-pip \
         shadow@testing \
