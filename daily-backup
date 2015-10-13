@@ -1,0 +1,2 @@
+#!/bin/bash
+su -c "gmvault sync -t quick -d /data ${GMVAULT_EMAIL_ADDR}" abc

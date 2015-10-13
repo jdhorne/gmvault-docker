@@ -3,9 +3,8 @@
 OAUTH_TOKEN="/data/${GMVAULT_EMAIL_ADDR}.oauth2"
 
 if [ "$GMVAULT_TZ" = "" ] ; then GMVAULT_TZ="America/New_York" ; fi
-echo "timezone: $GMVAULT_TZ"
-setup-timezone -z $GMVAULT_TZ
-date
+setup-timezone -z $GMVAULT_TZ > /dev/null
+echo `date`  timezone: $GMVAULT_TZ
 
 
 if [ ! "$(id -u abc)" -eq "$PUID" ]; then usermod -o -u "$PUID" abc ; fi
@@ -15,9 +14,21 @@ chown -R abc:abc /data
 
 if [ -f $OAUTH_TOKEN ]; then
 	echo OAuth token located: $OAUTH_TOKEN
-	echo running gmvault
-	su -c "gmvault sync -d /data ${GMVAULT_EMAIL_ADDR}" abc
-	exit
+
+	if [  "$GMVAULT_SKIP_STARTUP_SYNC" = "" ]; then
+		if [ -d /data/db ]; then
+			echo existing database directory found\; running quick sync
+			/etc/periodic/daily/daily-backup
+		else
+			echo no existing database found\; running full sync
+			/etc/periodic/weekly/weekly-backup
+		fi
+	else
+		echo skipping sync on startup
+	fi
+
+	# let cron take over from here
+	exec crond -f -d 7
 fi
 
 

@@ -21,6 +21,9 @@ RUN apk add --update \
 VOLUME /data
 RUN mkdir /app
 COPY gmvault.sh /app/gmvault.sh
+COPY daily-backup /etc/periodic/daily/
+COPY weekly-backup /etc/periodic/weekly/
+COPY heartbeat /etc/periodic/15min/
 
 WORKDIR /app
 
