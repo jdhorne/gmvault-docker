@@ -1,6 +1,7 @@
 #!/bin/bash
 
 OAUTH_TOKEN="/data/${GMVAULT_EMAIL_ADDR}.oauth2"
+FIRST_RUN_FLAG=/app/.first_run
 
 if [ "$GMVAULT_TZ" = "" ] ; then GMVAULT_TZ="America/New_York" ; fi
 setup-timezone -z $GMVAULT_TZ > /dev/null
@@ -15,8 +16,12 @@ chown -R abc:abc /data
 if [ -f $OAUTH_TOKEN ]; then
 	echo OAuth token located: $OAUTH_TOKEN
 
-	if [  "$GMVAULT_SKIP_STARTUP_SYNC" = "" ]; then
-		if [ -d /data/db ]; then
+	if [ "$GMVAULT_SKIP_STARTUP_SYNC" = "" ]; then
+		if [ -f $FIRST_RUN_FLAG ]; then
+			echo first run\; forcing full sync
+			/etc/periodic/weekly/weekly-backup
+			rm $FIRST_RUN_FLAG
+		elif [ -d /data/db ]; then
 			echo existing database directory found\; running quick sync
 			/etc/periodic/daily/daily-backup
 		else
@@ -31,6 +36,8 @@ if [ -f $OAUTH_TOKEN ]; then
 	exec crond -f -d 7
 fi
 
+
+touch $FIRST_RUN_FLAG
 
 echo #####
 echo # FIRST RUN SETUP
