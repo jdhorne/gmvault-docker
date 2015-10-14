@@ -33,7 +33,7 @@ if [ -f $OAUTH_TOKEN ]; then
 	fi
 
 	# let cron take over from here
-	exec crond -f -d 7
+	exec crond -f
 fi
 
 
