@@ -7,9 +7,23 @@ if [ "$GMVAULT_TZ" = "" ] ; then GMVAULT_TZ="America/New_York" ; fi
 setup-timezone -z $GMVAULT_TZ > /dev/null
 echo `date`  timezone: $GMVAULT_TZ
 
+if [ "$GMVAULT_UID" != "" ] ; then
+	if [ ! "$(id -u abc)" -eq "$GMVAULT_UID" ]; then
+		echo "switching uid from " `id -u abc` " to $GMVAULT_UID"
+		usermod -o -u "$GMVAULT_UID" abc
+	fi
+else
+	echo "GMVAULT_UID not specified\; using default uid " `id -u abc`
+fi
 
-if [ ! "$(id -u abc)" -eq "$PUID" ]; then usermod -o -u "$PUID" abc ; fi
-if [ ! "$(id -g abc)" -eq "$PGID" ]; then groupmod -o -g "$PGID" abc ; fi
+if [ "$GMVAULT_GID" != "" ] ; then
+	if [ ! "$(id -g abc)" -eq "$GMVAULT_GID" ]; then
+		echo "switching gid from " `id -g abc` " to $GMVAULT_GID"
+		groupmod -o -g "$GMVAULT_GID" abc
+	fi
+else
+	echo "GMVAULT_GID not specified\; using default gid " `id -g abc`
+fi
 
 chown -R abc:abc /data
 
