@@ -1,7 +1,7 @@
 # Overview
 Very small image based on Alpine Linux that uses cron to run gmvault on a daily basis.
 
-Quick syncs are performed every night, full syncs are performed weekly. Additionally, a sync is performed on container startup (unless the `GMVAULT_SKIP_STARTUP_SYMC` environment variable is set).
+Quick syncs are performed every night, full syncs are performed weekly. Additionally, a sync is performed on container startup (unless the `GMVAULT_SKIP_STARTUP_SYNC` environment variable is set).
 
 # First Run Setup
 First, note the required `GMVAULT_EMAIL_ADDR` environment variable.
