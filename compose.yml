@@ -1,0 +1,5 @@
+gmvault:
+  build: .
+  dockerfile: Dockerfile
+  environment:
+      GMVAULT_EMAIL_ADDR: test@example.com
